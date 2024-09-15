@@ -1,0 +1,20 @@
+{
+	"version": "2.0",
+	"software": {
+		"name": "@{software_name}",
+		"version": "@{software_version}"
+	},
+	"protocols": ["activitypub"],
+	"services": {
+		"inbound": [],
+		"outbound": []
+	},
+	"openRegistrations": false,
+	"usage": {
+		"users": {}
+	},
+	"metadata": {
+		"nodeName": "@{node_name}",
+		"nodeDescription": "@{node_desc}"
+	}
+}

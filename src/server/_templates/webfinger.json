@@ -1,0 +1,15 @@
+{
+	"subject": "@{acct}",
+	"links": [
+		{
+			"rel": "self",
+			"type": "application/activity+json",
+			"href": "@{actor_url}"
+		},
+		{
+			"rel": "http://webfinger.net/rel/profile-page",
+			"type": "text/plain",
+			"href": "@{profile_url}"
+		}
+	]
+}

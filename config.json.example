@@ -1,0 +1,14 @@
+{
+	"server": {
+		"host": "example.tld",
+		"name": "SyoDoN",
+		"desc": "A minimalistic ActivityPub implementation",
+		"bind": "0.0.0.0",
+		"port": 3000
+	},
+	"user": {
+		"acct": "syobon",
+		"name": "SyoBoN",
+		"privkey": ""
+	}
+}
