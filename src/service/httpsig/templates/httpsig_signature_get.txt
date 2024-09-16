@@ -1,0 +1,1 @@
+keyId="@{actor_url}#main-key",headers="(request-target) host date",signature="@{signature_base64}"

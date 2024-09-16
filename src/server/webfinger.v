@@ -6,10 +6,10 @@ import vweb
 fn (mut ctx Context) webfinger() vweb.Result {
 	resource := ctx.query['resource'] or { return ctx.not_found() }
 
-	root := ctx.data.root
-	acct := ctx.data.acct_full
-	actor_url := ctx.data.actor_url
-	profile_url := ctx.data.profile_url
+	root := ctx.data.server.root
+	acct := ctx.data.user.acct_full
+	actor_url := ctx.data.user.actor_url
+	profile_url := ctx.data.user.profile_url
 
 	if resource !in [
 		'acct:${acct}',
@@ -17,7 +17,7 @@ fn (mut ctx Context) webfinger() vweb.Result {
 		profile_url,
 		root,
 		'${root}/',
-		'${root}/${ctx.config.user.acct}',
+		'${root}/${ctx.data.user.acct}',
 	] {
 		return ctx.not_found()
 	}
