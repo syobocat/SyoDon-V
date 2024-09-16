@@ -1,16 +1,20 @@
 module server
 
-import vweb
+import veb
 import conf
 
 struct Context {
-	vweb.Context
-	data &conf.Data = &conf.data @[vweb_global]
+	veb.Context
+}
+
+pub struct Data {
+	conf.Data
 }
 
 pub fn serve() {
-	vweb.run_at(&Context{}, vweb.RunParams{
+	mut data := &Data{&conf.data}
+	veb.run_at[Data, Context](mut data, veb.RunParams{
 		family: .ip
-		port:   8080
+		port:   data.server.port
 	}) or { panic(err) }
 }
