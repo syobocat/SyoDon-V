@@ -45,7 +45,7 @@ pub fn create_header(method http.Method, body string, dest_url string) !http.Hea
 			headers.add_custom('Signature', signature_string)!
 		}
 		else {
-			error('Unknown method')
+			return error('Unknown method')
 		}
 	}
 
