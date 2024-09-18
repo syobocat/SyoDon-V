@@ -1,6 +1,7 @@
 # Binaries for programs and plugins
 main
 syodon
+SyoDon-V
 compile_json
 *.exe
 *.exe~
@@ -22,6 +23,7 @@ bin/
 
 # vweb and database
 *.db
+*.db-journal
 *.js
 
 config.json

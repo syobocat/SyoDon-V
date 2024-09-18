@@ -4,6 +4,7 @@ module conf
 import json
 import os
 import crypto.ed25519
+import db.sqlite
 import encoding.hex
 import v.vmod
 
@@ -15,11 +16,12 @@ pub:
 
 struct ServerConfig {
 pub:
-	host string @[required]
-	name string = 'SyoDoN'
-	desc string = 'A minimalistic ActivityPub implementation'
-	bind string = '0.0.0.0'
-	port int    = 3000
+	host    string @[required]
+	name    string = 'SyoDoN'
+	desc    string = 'A minimalistic ActivityPub implementation'
+	bind    string = '0.0.0.0'
+	port    int    = 3000
+	db_path string = 'database.db'
 }
 
 struct UserConfig {
@@ -35,7 +37,8 @@ pub:
 	server   struct {
 		ServerConfig
 	pub:
-		root string @[required]
+		root string    @[required]
+		db   sqlite.DB @[required]
 	}
 	user     struct {
 		UserConfig
@@ -68,20 +71,40 @@ fn read_config() Data {
 	config := json.decode(Config, config_json) or { panic('Failed to parse config.json: ${err}') }
 	manifest := vmod.decode(@VMOD_FILE) or { panic(err) }
 	seed_u8 := hex.decode(config.user.privkey_seed) or { panic(err) }
-	if seed_u8.len != ed25519.seed_size {
+	privkey := if seed_u8.len == ed25519.seed_size {
+		ed25519.new_key_from_seed(seed_u8)
+	} else {
 		println('Generating a private key...')
 		_, new_key := ed25519.generate_key() or { panic(err) }
-		println('A key has been generated. Please append the following to your config:')
-		println('"privkey_seed": "${hex.encode(new_key.seed())}"')
-		exit(0)
+		println('A key has been generated.')
+		mut new_config := Config{
+			server: config.server
+			user:   UserConfig{
+				...config.user
+				privkey_seed: hex.encode(new_key.seed())
+			}
+		}
+		new_config_json := json.encode_pretty(new_config)
+		mut f := os.create('config.json') or {
+			panic('Failed to open the config file for writing: ${err}')
+		}
+		f.write_string(new_config_json) or { panic('Failed to write to the config file: ${err}') }
+		f.close()
+		println('A key has been saved into the config file.')
+
+		new_key
 	}
-	privkey := ed25519.new_key_from_seed(seed_u8)
+
+	db := sqlite.connect(config.server.db_path) or { panic('Failed to open database: ${err}') }
+	db.synchronization_mode(.normal) or { panic(err) }
+	db.journal_mode(.truncate) or { panic(err) }
 
 	return Data{
 		software: manifest
 		server:   struct {
 			ServerConfig: config.server
 			root:         'https://${config.server.host}'
+			db:           db
 		}
 		user:     struct {
 			UserConfig:  config.user
