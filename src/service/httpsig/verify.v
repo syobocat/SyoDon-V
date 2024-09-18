@@ -25,6 +25,9 @@ pub fn verify_header(method http.Method, header http.Header, dest_path string, b
 			$tmpl('templates/httpsig_post.txt')
 		}
 		else {
+			if pass_unknown {
+				return
+			}
 			return error('Unknown method: ${method}')
 		}
 	}
