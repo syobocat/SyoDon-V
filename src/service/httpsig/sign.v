@@ -1,6 +1,6 @@
 module httpsig
 
-import crypto.sha256
+import crypto.sha512
 import encoding.base64
 import net.http
 import net.urllib
@@ -33,7 +33,7 @@ pub fn create_header(method http.Method, body string, dest_url string) !http.Hea
 			headers.add_custom('Signature', signature_string)!
 		}
 		.post {
-			digest := sha256.sum256(body.bytes())
+			digest := sha512.sum512(body.bytes())
 			digest_base64 := base64.encode(digest)
 
 			to_be_signed := $tmpl('templates/httpsig_post.txt')
@@ -41,7 +41,7 @@ pub fn create_header(method http.Method, body string, dest_url string) !http.Hea
 			signature_base64 := base64.encode(signature)
 			signature_string := $tmpl('templates/httpsig_signature_post.txt')
 
-			headers.add(.digest, 'sha-256=${digest_base64}')
+			headers.add(.digest, 'sha-512=${digest_base64}')
 			headers.add_custom('Signature', signature_string)!
 		}
 		else {

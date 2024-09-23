@@ -2,7 +2,7 @@ module httpsig
 
 import crypto.ed25519
 import crypto.pem
-import crypto.sha256
+import crypto.sha512
 import encoding.base64
 import net.http
 import user
@@ -18,7 +18,7 @@ pub fn verify_header(method http.Method, header http.Header, dest_path string, b
 		.post {
 			digest_base64 := header.get(.digest)!
 			digest := base64.decode(digest_base64)
-			expected_digest := sha256.sum256(body.bytes())
+			expected_digest := 'sha512=${sha512.sum512(body.bytes())}'
 			if digest != expected_digest {
 				return error('Wrong digest')
 			}

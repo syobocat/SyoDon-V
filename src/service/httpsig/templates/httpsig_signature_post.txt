@@ -1,1 +1,1 @@
-keyId="@{actor_url}#main-key",algorithm="ed25519",headers="(request-target) host date digest",signature="@{signature_base64}"
+keyId="@{actor_url}#main-key",algorithm="hs2019",headers="(request-target) host date digest",signature="@{signature_base64}"
