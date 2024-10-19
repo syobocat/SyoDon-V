@@ -4,11 +4,13 @@ import cli
 import os
 import server
 import service.httpsig
+import service.jobqueue
 
 fn main() {
 	mut app := cli.Command{
 		name:     'SyoDoN'
 		execute:  fn (cmd cli.Command) ! {
+			spawn jobqueue.process()
 			server.serve()
 			return
 		}
