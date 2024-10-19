@@ -8,14 +8,14 @@ import encoding.base64
 import user
 
 pub fn verify_headers_cavage(params HttpsigInput) ! {
-	method = params.method.str()
-	dest_host := params.header.get(.host)!
+	method := params.method.str()
+	dest_host := params.headers.get(.host)!
 	dest_path := params.path
-	date := params.header.get(.date)!
+	date := params.headers.get(.date)!
 	
 	has_body := params.body.len > 0
 	
-	digest_base64 := header.get(.digest) or { '' }.after_char(`=`)
+	digest_base64 := params.headers.get(.digest) or { '' }.after_char(`=`)
 	
 	if has_body {
 		digest := base64.decode(digest_base64)
@@ -29,7 +29,7 @@ pub fn verify_headers_cavage(params HttpsigInput) ! {
 	// TODO (important): build signature base based on Signature header
 	expected_data := $tmpl('templates_cavage/signature-base.txt')
 	
-	signature_header := header.get_custom('Signature', exact: false)!
+	signature_header := params.headers.get_custom('Signature', exact: false)!
 	
 	mut signature_map := map[string]string{}
 	for field in signature_header.split(',') {
@@ -55,7 +55,7 @@ pub fn verify_headers_cavage(params HttpsigInput) ! {
 	pubkey_pem := actor.public_key.public_key_pem
 	pubkey_block := pem.decode_only(pubkey_pem) or { return error('Invalid pem') }
 	if pubkey_block.data.len != ed25519.public_key_size {
-		if pass_unknown {
+		if params.pass_unknown {
 			return
 		} else {
 			return error('Unknown type of key')
