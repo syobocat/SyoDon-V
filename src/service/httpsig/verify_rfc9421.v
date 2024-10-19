@@ -9,4 +9,5 @@ module httpsig
 
 pub fn verify_headers_rfc9421(params HttpsigInput) ! {
 	// TODO
+	return error("TODO!")
 }
