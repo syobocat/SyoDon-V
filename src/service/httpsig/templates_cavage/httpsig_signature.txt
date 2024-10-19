@@ -1,0 +1,5 @@
+@if has_body
+keyId="@{actor_url}#main-key",algorithm="hs2019",headers="(request-target) host date digest",signature="@{signature_base64}"
+@else
+keyId="@{actor_url}#main-key",algorithm="hs2019",headers="(request-target) host date",signature="@{signature_base64}"
+@end

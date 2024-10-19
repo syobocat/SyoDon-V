@@ -1,0 +1,5 @@
+@if has_body
+("@@method" "@@authority" "@@path" "content-digest" "content-length" "content-type");created=@{date_posix};alg="ed25519";keyid="@{actor_url}#main-key"
+@else
+("@@method" "@@authority" "@@path" "accept");created=@{date_posix};alg="ed25519";keyid="@{actor_url}#main-key"
+@end

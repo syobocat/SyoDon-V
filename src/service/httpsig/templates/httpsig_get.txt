@@ -1,3 +1,0 @@
-(request-target): get @{dest_path}
-host: @{host}
-date: @{date}

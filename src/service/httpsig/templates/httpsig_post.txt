@@ -1,4 +1,0 @@
-(request-target): post @{dest_path}
-host: @{host}
-date: @{date}
-digest: sha-512=@{digest_base64}

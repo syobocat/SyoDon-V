@@ -1,0 +1,11 @@
+"@@method": @{method}
+"@@authority": @{dest_host}
+"@@path": @{dest_path}
+@if has_body
+"content-digest": sha-512=:@{digest_base64}:
+"content-length": @{content_length}
+"content-type": @{content_type}
+@else
+"accept": @{accept}
+@end
+"@@signature-params": @{signature_params}

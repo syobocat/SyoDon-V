@@ -1,0 +1,6 @@
+(request-target): @{method} @{dest_path}
+host: @{dest_host}
+date: @{date}
+@if has_body
+digest: sha-512=@{digest_base64}
+@end
