@@ -11,5 +11,8 @@
 		"acct": "syobon",
 		"name": "SyoBoN",
 		"privkey_seed": ""
+	},
+	"misc": {
+		"jobqueue_concurrency": 8
 	}
 }

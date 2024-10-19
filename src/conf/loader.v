@@ -12,6 +12,7 @@ struct Config {
 pub:
 	server ServerConfig @[required]
 	user   UserConfig   @[required]
+	misc   MiscConfig   @[required]
 }
 
 struct ServerConfig {
@@ -31,6 +32,11 @@ pub:
 	privkey_seed string @[required]
 }
 
+struct MiscConfig {
+pub:
+	jobqueue_concurrency u8 = 8
+}
+
 pub struct Data {
 pub:
 	software vmod.Manifest @[required]
@@ -48,6 +54,7 @@ pub:
 		profile_url string             @[required]
 		privkey     ed25519.PrivateKey @[required]
 	}
+	misc     MiscConfig
 }
 
 pub const data = read_config()
@@ -83,6 +90,7 @@ fn read_config() Data {
 				...config.user
 				privkey_seed: hex.encode(new_key.seed())
 			}
+			misc:   config.misc
 		}
 		new_config_json := json.encode_pretty(new_config)
 		mut f := os.create('config.json') or {
@@ -113,5 +121,6 @@ fn read_config() Data {
 			profile_url: 'https://${config.server.host}/profile'
 			privkey:     privkey
 		}
+		misc:     config.misc
 	}
 }

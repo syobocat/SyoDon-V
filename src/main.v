@@ -10,7 +10,7 @@ fn main() {
 	mut app := cli.Command{
 		name:     'SyoDoN'
 		execute:  fn (cmd cli.Command) ! {
-			spawn jobqueue.process()
+			jobqueue.spawn()
 			server.serve()
 			return
 		}

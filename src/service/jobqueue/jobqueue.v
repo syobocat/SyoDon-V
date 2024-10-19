@@ -3,6 +3,7 @@ module jobqueue
 import log
 import net.http
 import time
+import conf
 
 interface Job {
 	process() !
@@ -47,7 +48,7 @@ fn retry_job(job Job) {
 	insert_job(new_job)
 }
 
-pub fn process() {
+fn process() {
 	for {
 		job := <-queue
 		job.process() or {
@@ -58,5 +59,12 @@ pub fn process() {
 				spawn retry_job(job)
 			}
 		}
+	}
+}
+
+pub fn spawn() {
+	log.info('Spawning ${conf.data.misc.jobqueue_concurrency} workers...')
+	for _ in 0 .. conf.data.misc.jobqueue_concurrency {
+		spawn process()
 	}
 }
