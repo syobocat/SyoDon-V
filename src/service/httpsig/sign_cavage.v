@@ -42,7 +42,7 @@ fn create_headers_cavage(params HttpsigConfig) !http.Header {
 	headers.add(.host, dest_host)
 	headers.add(.date, date)
 	if has_body {
-		headers.add_custom('Digest', digest_base64)!
+		headers.add(.digest, 'sha-512=${digest_base64}')
 	}
 	if params.content_type.len > 0 {
 		headers.add(.content_type, params.content_type)
