@@ -7,7 +7,7 @@ import net.urllib
 import time
 import conf
 
-pub fn create_headers(params HttpsigConfig) !http.Header {
+fn create_headers_hybrid(params HttpsigConfig) !http.Header {
 	mut headers := http.Header{}
 
 	data := &conf.data
@@ -37,11 +37,17 @@ pub fn create_headers(params HttpsigConfig) !http.Header {
 	actor_url := data.user.actor_url
 
 	signature_params := $tmpl('templates_rfc9421/signature-params.txt').trim_space_right()
-	signature_base := $tmpl('templates_rfc9421/signature-base.txt').trim_space_right()
+	signature_base_rfc9421 := $tmpl('templates_rfc9421/signature-base.txt').trim_space_right()
+	signature_base_cavage := $tmpl('templates_cavage/signature-base.txt').trim_space_right()
 
 	privkey := data.user.privkey
-	signature := privkey.sign(signature_base.bytes())!
-	signature_base64 := base64.encode(signature)
+	signature_rfc9421 := privkey.sign(signature_base_rfc9421.bytes())!
+	signature_base64_rfc9421 := base64.encode(signature_rfc9421)
+	
+	signature_cavage := privkey.sign(signature_base_cavage.bytes())!
+	signature_base64 := base64.encode(signature_cavage)
+	
+	signature_string_cavage := $tmpl('templates_cavage/httpsig_signature.txt').trim_space_right()
 
 	headers.add(.host, dest_host)
 	headers.add(.date, date)
@@ -56,7 +62,7 @@ pub fn create_headers(params HttpsigConfig) !http.Header {
 		headers.add(.accept, accept)
 	}
 	headers.add_custom('Signature-Input', 'sig=${signature_params}')!
-	headers.add_custom('Signature', 'sig=:${signature_base64}:')!
+	headers.add_custom('Signature', '${signature_string_cavage},sig=:${signature_base64_rfc9421}:')!
 
 	return headers
 }

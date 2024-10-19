@@ -7,7 +7,7 @@ import net.urllib
 import time
 import conf
 
-pub fn create_headers(params HttpsigConfig) !http.Header {
+fn create_headers_rfc9421(params HttpsigConfig) !http.Header {
 	mut headers := http.Header{}
 
 	data := &conf.data
@@ -20,6 +20,11 @@ pub fn create_headers(params HttpsigConfig) !http.Header {
 
 	date_now := time.now().local_to_utc()
 	date := date_now.http_header_string()
+	date_posix := date_now.unix()
+
+	accept := params.accept
+	content_length := params.body.len
+	content_type := params.content_type
 
 	has_body := params.body.len > 0
 	digest_base64 := if has_body {
@@ -31,23 +36,27 @@ pub fn create_headers(params HttpsigConfig) !http.Header {
 
 	actor_url := data.user.actor_url
 
-	signature_base := $tmpl('templates_cavage/signature-base.txt').trim_space_right()
+	signature_params := $tmpl('templates_rfc9421/signature-params.txt').trim_space_right()
+	signature_base := $tmpl('templates_rfc9421/signature-base.txt').trim_space_right()
 
 	privkey := data.user.privkey
 	signature := privkey.sign(signature_base.bytes())!
 	signature_base64 := base64.encode(signature)
 
-	signature_string := $tmpl('templates_cavage/httpsig_signature.txt').trim_space_right()
-
 	headers.add(.host, dest_host)
 	headers.add(.date, date)
-	if params.accept.len > 0 {
-		headers.add(.accept, params.accept)
+	if has_body {
+		headers.add_custom('Content-Digest', 'sha-512=:${digest_base64}:')!
+		headers.add(.content_length, '${content_length}')
 	}
-	if params.content_type.len > 0 {
-		headers.add(.content_type, params.content_type)
+	if content_type.len > 0 {
+		headers.add(.content_type, content_type)
 	}
-	headers.add_custom('Signature', signature_string)!
+	if accept.len > 0 {
+		headers.add(.accept, accept)
+	}
+	headers.add_custom('Signature-Input', 'sig=${signature_params}')!
+	headers.add_custom('Signature', 'sig=:${signature_base64}:')!
 
 	return headers
 }
