@@ -52,6 +52,7 @@ fn create_headers_hybrid(params HttpsigConfig) !http.Header {
 	headers.add(.host, dest_host)
 	headers.add(.date, date)
 	if has_body {
+		headers.add_custom('Digest', 'sha-512=${digest_base64}')!
 		headers.add_custom('Content-Digest', 'sha-512=:${digest_base64}:')!
 		headers.add(.content_length, '${content_length}')
 	}

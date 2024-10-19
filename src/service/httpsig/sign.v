@@ -9,7 +9,7 @@ pub:
 	uri          string      @[required]
 	accept       string
 	content_type string
-	body         []u8 @[required]
+	body         []u8
 }
 
 pub fn create_headers(params HttpsigConfig) !http.Header {
