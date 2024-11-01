@@ -23,5 +23,5 @@ fn (data &Data) webfinger(mut ctx Context) veb.Result {
 	}
 
 	ctx.set_content_type('application/jrd+json; charset=utf-8')
-	return ctx.ok($tmpl('templates/webfinger.json'))
+	return ctx.ok($tmpl('../templates/schemas/webfinger.json'))
 }

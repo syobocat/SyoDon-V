@@ -18,5 +18,5 @@ fn (data &Data) actor(mut ctx Context) veb.Result {
 		'\\n')
 
 	ctx.set_content_type('application/activity+json; charset=utf-8')
-	return ctx.ok($tmpl('templates/actor.json'))
+	return ctx.ok($tmpl('../templates/schemas/ap_actor.json'))
 }
