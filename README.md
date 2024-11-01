@@ -7,6 +7,10 @@
 - V
 - sqlite3
 
+```sh
+v install markdown
+```
+
 ## ビルド
 
 ```sh

@@ -1,0 +1,7 @@
+{
+	"@@context": "https://www.w3.org/ns/activitystreams",
+	"type": "Create",
+	"id": "@{root}/activity/@{activity_id}",
+	"actor": "@{actor_url}",
+	"object": "@{object}"
+}

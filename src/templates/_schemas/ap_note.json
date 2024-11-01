@@ -1,0 +1,14 @@
+{
+	"@@context": ["https://www.w3.org/ns/activitystreams", "@{root}/schema"],
+	"id": "@{root}/posts/@{post_id}",
+	"type": "Note",
+	"attachment": [],
+	"attributedTo": "@{actor_url}",
+	"cc": ["@{root}/followers"],
+	"tag": [],
+	"to": ["https://www.w3.org/ns/activitystreams#Public"],
+	"url": "@{root}/posts/@{post_id}",
+	"content": "@{post_html}",
+	"published": "@{post_date}",
+	"summary": "@{post_summary}"
+}

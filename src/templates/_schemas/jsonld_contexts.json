@@ -1,0 +1,22 @@
+{
+	"@context": [
+		"https://www.w3.org/ns/activitystreams",
+		"https://w3id.org/security/v1",
+		{
+			"fedibird": "http://fedibird.com/ns#",
+			"schema": "http://schema.org#",
+			"toot": "http://joinmastodon.org/ns#",
+			"vcard": "http://www.w3.org/2006/vcard/ns#",
+			"Hashtag": "as:Hashtag",
+			"quoteUrl": "as:quoteUrl",
+			"sensitive": "as:sensitive",
+			"manuallyApprovesFollowers": "as:manuallyApprovesFollowers",
+			"quoteUri": "fedibird:quoteUri",
+			"PropertyValue": "schema:PropertyValue",
+			"value": "schema:value",
+			"Emoji": "toot:Emoji",
+			"discoverable": "toot:discoverable",
+			"featured": "toot:featured"
+		}
+	]
+}
