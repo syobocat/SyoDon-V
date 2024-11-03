@@ -23,7 +23,7 @@ mut:
 
 const queue = chan Job{}
 
-fn insert_job(job Job) {
+pub fn insert_job(job Job) {
 	queue <- job
 }
 
@@ -48,11 +48,13 @@ pub fn spawn() {
 fn process() {
 	for {
 		job := <-queue
-		job.process() or {
+		if _ := job.process() {
+			log.debug('${job} executed.')
+		} else {
 			if job.retry_count > 50 {
-				log.warn('Job failed. Discarding.')
+				log.warn('Job failed: ${err}. Discarding.')
 			} else {
-				log.warn('Job failed. Retrying...')
+				log.warn('Job failed: ${err}. Retrying...')
 				spawn retry_job(job)
 			}
 		}

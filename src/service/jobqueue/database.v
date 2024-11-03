@@ -1,17 +1,15 @@
 module jobqueue
 
-import db.sqlite
 import conf
 
-struct DatabaseJob {
+pub struct DatabaseJob {
 	BaseJob
-	query string
+pub:
+	query  string
+	params []string
 }
 
 fn (job DatabaseJob) process() ! {
 	db := &conf.data.server.db
-	res := db.exec_none(job.query)
-	if sqlite.is_error(res) {
-		return error('SQLite error: code ${res}')
-	}
+	_ := db.exec_param_many(job.query, job.params)!
 }
