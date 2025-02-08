@@ -1,15 +1,16 @@
 module server
 
+import conf
 import veb
 
 @['/.well-known/webfinger']
-fn (data &Data) webfinger(mut ctx Context) veb.Result {
+fn (app &App) webfinger(mut ctx Context) veb.Result {
 	resource := ctx.query['resource'] or { return ctx.not_found() }
 
-	root := data.server.root
-	acct := data.user.acct_full
-	actor_url := data.user.actor_url
-	profile_url := data.user.profile_url
+	root := conf.data.server.root
+	acct := conf.data.user.acct_full
+	actor_url := conf.data.user.actor_url
+	profile_url := conf.data.user.profile_url
 
 	if resource !in [
 		'acct:${acct}',
@@ -17,7 +18,7 @@ fn (data &Data) webfinger(mut ctx Context) veb.Result {
 		profile_url,
 		root,
 		'${root}/',
-		'${root}/${data.user.acct}',
+		'${root}/${conf.data.user.acct}',
 	] {
 		return ctx.not_found()
 	}

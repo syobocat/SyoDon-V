@@ -1,12 +1,13 @@
 {
-	"@@context": [
-		"https://www.w3.org/ns/activitystreams",
-		"https://w3id.org/security/v1"
-	],
-	"id": "@{actor_url}",
+	"@@context": ["https://www.w3.org/ns/activitystreams", "@{root}/schema"],
 	"type": "Person",
-	"preferredUsername": "@{acct}",
+	"id": "@{actor_url}",
+	"following": "@{root}/following",
+	"followers": "@{root}/followers",
 	"inbox": "@{root}/inbox",
+	"outbox": "@{root}/outbox",
+	"preferredUsername": "@{acct}",
+	"name": "@{name}",
 	"publicKey": {
 		"id": "@{actor_url}",
 		"owner": "@{actor_url}",

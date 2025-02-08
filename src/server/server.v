@@ -7,14 +7,12 @@ struct Context {
 	veb.Context
 }
 
-pub struct Data {
-	conf.Data
-}
+pub struct App {}
 
 pub fn serve() {
-	mut data := &Data{&conf.data}
-	veb.run_at[Data, Context](mut data, veb.RunParams{
+	mut app := &App{}
+	veb.run_at[App, Context](mut app, veb.RunParams{
 		family: .ip
-		port:   data.server.port
+		port:   conf.data.server.port
 	}) or { panic(err) }
 }

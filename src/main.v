@@ -18,7 +18,7 @@ fn main() {
 			cli.Command{
 				name:    'init'
 				execute: fn (cmd cli.Command) ! {
-					initialize_database()
+					initialize_database()!
 					return
 				}
 			},

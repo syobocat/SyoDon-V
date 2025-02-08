@@ -2,14 +2,16 @@ module server
 
 import crypto.pem
 import veb
+import conf
 
 @['/actor']
-fn (data &Data) actor(mut ctx Context) veb.Result {
-	root := data.server.root
-	actor_url := data.user.actor_url
-	acct := data.user.acct
+fn (app &App) actor(mut ctx Context) veb.Result {
+	root := conf.data.server.root
+	actor_url := conf.data.user.actor_url
+	acct := conf.data.user.acct
+	name := conf.data.user.name
 
-	pubkey := data.user.privkey.public_key()
+	pubkey := conf.data.user.privkey.public_key()
 	block := pem.Block{
 		block_type: 'PUBLIC KEY'
 		data:       pubkey
@@ -18,5 +20,5 @@ fn (data &Data) actor(mut ctx Context) veb.Result {
 		'\\n')
 
 	ctx.set_content_type('application/activity+json; charset=utf-8')
-	return ctx.ok($tmpl('../templates/schemas/ap_actor.json'))
+	return ctx.ok($tmpl('../templates/schemas/ap_person.json'))
 }

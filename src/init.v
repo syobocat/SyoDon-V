@@ -1,35 +1,15 @@
 module main
 
 import conf
+import object
 
-fn initialize_database() {
+fn initialize_database() ! {
 	db := &conf.data.server.db
 	println('Preparing database...')
-	db.exec_none('
-		CREATE TABLE IF NOT EXISTS posts (
-			id              TEXT PRIMARY KEY,
-			actor_id        TEXT NOT NULL,
-			content         TEXT NOT NULL,
-			url             TEXT NOT NULL,
-			summary         TEXT,
-			date            INTEGER NOT NULL,
-			favorites_count INTEGER NOT NULL,
-			repeats_count   INTEGER NOT NULL,
-			replies_count   INTEGER NOT NULL
-		)')
-	db.exec_none('
-		CREATE TABLE IF NOT EXISTS actors (
-			id              TEXT PRIMARY KEY,
-			acct            TEXT NOT NULL,
-			name            TEXT,
-			avatar_url      TEXT,
-			bio             TEXT,
-			first_seen_at   INTEGER NOT NULL,
-			created_at      INTEGER,
-			followers_count INTEGER NOT NULL,
-			following_count INTEGER NOT NULL,
-			posts_count     INTEGER NOT NULL
-		)')
+	sql conf.data.server.db {
+		create table object.Post
+		create table object.Actor
+	}!
 	db.exec_none('
 		CREATE TABLE IF NOT EXISTS followings (
 			id     TEXT PRIMARY KEY,
